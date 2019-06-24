@@ -3,7 +3,7 @@ const topicsRouter = express.Router();
 
 
 
-
+topicsRouter.get('/', sendTopics);
 
 
 

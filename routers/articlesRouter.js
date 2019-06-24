@@ -4,16 +4,26 @@ const articlesRouter = express.Router();
 
 
 
+articlesRouter.get('/', sendArticles);
+
+articlesRouter
+    .route('/:article_id')
+    .get(getArticleById)
+    .patch(patchArticleById)
+
+
+articlesRouter
+    .route('/:article_id/comments')
+    .post(addCommentByArticleId)
+    .get(getCommentsByArticleId)
+    .all(errHandle405)
 
 
 
 
 
 
-
-
-
-
+    
 
 
 
