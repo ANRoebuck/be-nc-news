@@ -21,7 +21,7 @@ describe('/api', () => {
     });
         
     describe('/users/:username', () => {
-        it('responds with a user object', () => {
+        it('GETs a user object', () => {
             return request
                 .get('/api/users/rogersop')
                 .expect(200)
@@ -30,18 +30,18 @@ describe('/api', () => {
                     expect(user.name).to.equal('paul');
                 }); 
         });
-        it('404 responds not found for non-existent but valid username', () => {
+        it('GETs 404 not found for non-existent username', () => {
             return request
                 .get('/api/users/gollum')
                 .expect(404)
                 .then(({ body }) => {
-                    expect(body.message).to.equal('invalid username');
+                    expect(body.message).to.equal('user does not exist: gollum');
                 });
         });
     });
 
     describe('/articles/:article_id', () => {
-        it('responds with an article object', () => {
+        it('GETs an article object', () => {
             return request
                 .get('/api/articles/1')
                 .expect(200)
@@ -49,13 +49,29 @@ describe('/api', () => {
                     expect(body).to.contain.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'comment_count');
                 }); 
         });
-        it('404 responds not found for non-existent but valid username', () => {
-            // return request
-            //     .get('/api/users/gollum')
-            //     .expect(404)
-            //     .then(({ body }) => {
-            //         expect(body.message).to.equal('invalid username');
-            //     });
+        it('GETs 404 not found for non-existent but valid article_id', () => {
+            return request
+                .get('/api/articles/12345')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).to.equal('article does not exist: 12345');
+                });
+        });
+        it('GETs 400 bad request for invalid article_id', () => {
+            return request
+                .get('/api/articles/cabbages')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).to.equal('bad request');
+                });
+        });
+        it('PATCHes', () => {
+            return request
+                .patch('/api/articles/1')
+                .expect('201')
+                .then(({ body }) => {
+                    console.log(body, 'spec');
+                });
         });
     });
 

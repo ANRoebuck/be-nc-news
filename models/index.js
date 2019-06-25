@@ -13,7 +13,7 @@ exports.getUserById = (username) => {
         .from('users')
         .where({ username })
         .then(rows => {
-            if(rows.length === 0) return Promise.reject({status: 404, message: 'invalid username'});
+            if(rows.length === 0) return Promise.reject({status: 404, message: `user does not exist: ${username}`});
             else return rows[0];
         });
 };
@@ -31,8 +31,11 @@ exports.getArticleById = (article_id) => {
                 .from('articles')
                 .where({ article_id })
                 .then(([article]) => {
-                    article.comment_count = refObj[article.article_id];
-                    return article;
+                    if(!article) return Promise.reject({status:404, message: `article does not exist: ${article_id}`});
+                    else {
+                        article.comment_count = refObj[article.article_id];
+                        return article;
+                    };
                 });
         });
 };
