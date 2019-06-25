@@ -1,15 +1,15 @@
 const express = require("express");
 const articlesRouter = express.Router();
+const { sendArticleById, updateArticleById } = require('../controllers');
 const { errHandle405 } = require('../errHandle');
-
 
 
 // articlesRouter.get('/', sendArticles);
 
-// articlesRouter
-//     .route('/:article_id')
-//     .get(getArticleById)
-//     .patch(patchArticleById)
+articlesRouter
+    .route('/:article_id')
+    .get(sendArticleById)
+    .patch(updateArticleById);
 
 
 // articlesRouter

@@ -40,4 +40,23 @@ describe('/api', () => {
         });
     });
 
+    describe('/articles/:article_id', () => {
+        it('responds with an article object', () => {
+            return request
+                .get('/api/articles/1')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body).to.contain.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'comment_count');
+                }); 
+        });
+        it('404 responds not found for non-existent but valid username', () => {
+            // return request
+            //     .get('/api/users/gollum')
+            //     .expect(404)
+            //     .then(({ body }) => {
+            //         expect(body.message).to.equal('invalid username');
+            //     });
+        });
+    });
+
 });
