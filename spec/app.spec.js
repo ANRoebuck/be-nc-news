@@ -5,9 +5,7 @@ const { expect } = require('chai');
 const { connection } = require('../connection');
 
 describe('/api', () => {
-    beforeEach(() => {
-        return connection.seed.run();
-    });
+    beforeEach(() => connection.seed.run());
     after(() => connection.destroy());
     
     describe('/topics', () => {
@@ -25,10 +23,19 @@ describe('/api', () => {
     describe('/users/:username', () => {
         it('responds with a user object', () => {
             return request
-                .get('/api/users/paul')
+                .get('/api/users/rogersop')
                 .expect(200)
+                .then(({ body : { user }}) => {
+                    expect(user).to.contain.keys('username', 'name', 'avatar_url');
+                    expect(user.name).to.equal('paul');
+                }); 
+        });
+        it('404 responds not found for non-existent but valid username', () => {
+            return request
+                .get('/api/users/gollum')
+                .expect(404)
                 .then(({ body }) => {
-                    console.log(body);
+                    expect(body.message).to.equal('invalid username');
                 });
         });
     });
