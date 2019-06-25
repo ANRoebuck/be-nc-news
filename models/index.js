@@ -73,3 +73,19 @@ exports.patchArticleById = (vote, article_id) => {
             };
         });
 };
+
+exports.postCommentByArticleId = (comment, article_id) => {
+    const newComment = {
+        author: comment.username,
+        body: comment.body,
+        article_id
+    };
+    return connection
+        .insert(newComment)
+        .into('comments')
+        .returning('*')
+        .then(([addedComment]) => {
+            if(!addedComment) return Promise.reject({status:404, message:`article does not exist: ${article_id}`})
+            else return addedComment;
+        });
+};

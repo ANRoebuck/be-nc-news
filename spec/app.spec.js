@@ -97,4 +97,58 @@ describe('/api', () => {
         });
     });
 
+    describe('/articles/:article_id/comments', () => {
+        it('POSTs a comment', () => {
+            const comment = {
+                body: 'One does not simply walk into Mordor',
+                username: 'butter_bridge'
+            };
+            return request
+                .post('/api/articles/1/comments')
+                .send(comment)
+                .expect(201)
+                .then(({ body }) => {
+                    expect(body).to.include.keys('comment_id', 'author', 'article_id', 'votes', 'body', 'created_at');
+                });
+        });
+        it('POSTs 400 bad request for non-existent but valid article_id', () => {
+            const comment = {
+                body: 'One does not simply walk into Mordor',
+                username: 'butter_bridge'
+            };
+            return request
+                .post('/api/articles/12345/comments')
+                .send(comment)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).to.equal('bad request')
+                });
+        });
+        it('POSTs 400 bad request for invalid article_id', () => {
+            const comment = {
+                body: 'One does not simply walk into Mordor',
+                username: 'butter_bridge'
+            };
+            return request
+                .post('/api/articles/cucumber/comments')
+                .send(comment)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).to.equal('bad request')
+                });
+        });
+        it('POSTs 400 bad request for invalid comment', () => {
+            const comment = {
+                username: 'butter_bridge'
+            };
+            return request
+                .post('/api/articles/1/comments')
+                .send(comment)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).to.equal('bad request')
+                });
+        });
+    });
+
 });

@@ -2,7 +2,8 @@ const {
     getTopics,
     getUserById,
     getArticleById,
-    patchArticleById
+    patchArticleById,
+    postCommentByArticleId
 } = require('../models');
 
 exports.sendTopics = (req, res, next) => {
@@ -41,7 +42,15 @@ exports.updateArticleById = (req, res, next) => {
             res.status(201).send(updatedArticle);
         })
         .catch(next);
+        //readme says to return updated article, not just updated value
+        //correct to re-query db & use second model?
 };
-//readme says to return updated article, not just updated value
-//correct to re-query db & use second model?
 
+exports.addCommentByArticleId = (req, res, next) => {
+    const { article_id } = req.params;
+    postCommentByArticleId(req.body, article_id)
+        .then(addedComment => {
+            res.status(201).send(addedComment);
+        })
+        .catch(next);
+};
