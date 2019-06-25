@@ -39,3 +39,37 @@ exports.getArticleById = (article_id) => {
                 });
         });
 };
+
+exports.patchArticleById = (vote, article_id) => {
+
+    // return getArticleById(article_id)
+    //     .then(article => {
+    //         const newVotes = { votes: article.votes + vote.inc_votes }
+    //         return connection('articles')
+    //             .where({ article_id })
+    //             .update(newVotes)
+    //             .returning('*')
+    //             .then(([updatedArticle]) => {
+    //                 console.log(updatedArticle);
+    //                 return updatedArticle;
+    //             });
+    //     });
+
+    return connection
+        .select('votes')
+        .from('articles')
+        .where({ article_id })
+        .then(([article]) => {
+            if(!article) return Promise.reject({status:404, message: `article does not exist: ${article_id}`});
+            else {
+                const newVotes = { votes: article.votes + vote.inc_votes }
+                return connection('articles')
+                    .where({ article_id })
+                    .update(newVotes)
+                    .returning('*')
+                    .then(([updatedArticle]) => {
+                        return updatedArticle;
+                    });
+            };
+        });
+};

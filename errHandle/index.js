@@ -4,6 +4,7 @@ exports.errHandle400 = (err, req, res, next) => {
     console.log(err, 'errhandle400')
     const codes = ['22P02'];
     if(codes.includes(err.code)){
+        console.log(`custom error for psql error ${err.code}`)
         res.status(400).send({message: 'bad request'});
     }
     else next(err);

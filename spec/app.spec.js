@@ -65,12 +65,34 @@ describe('/api', () => {
                     expect(body.message).to.equal('bad request');
                 });
         });
-        it('PATCHes', () => {
+        it('PATCHes an article', () => {
+            const vote = { inc_votes: 5 };
             return request
                 .patch('/api/articles/1')
-                .expect('201')
+                .send(vote)
+                .expect(201)
                 .then(({ body }) => {
-                    console.log(body, 'spec');
+                    expect(body).to.contain.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'comment_count');
+                });
+        });
+        it('PATCHes 404 not found for non-existent but valid article_id', () => {
+            const vote = { inc_votes: 5 };
+            return request
+                .patch('/api/articles/12345')
+                .send(vote)
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).to.equal('article does not exist: 12345');
+                });
+        });
+        it('PATCHes 400 bad request for invalid article_id', () => {
+            const vote = { inc_votes: 5 };
+            return request
+                .patch('/api/articles/bananas')
+                .send(vote)
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).to.equal('bad request');
                 });
         });
     });
