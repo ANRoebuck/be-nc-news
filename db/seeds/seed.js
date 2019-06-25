@@ -23,11 +23,9 @@ exports.seed = function(knex, Promise) {
     return knex('articles').insert(dateFormattedArticles).returning('*');
   })
   .then(articleRows => {
-    console.log(commentData[0]);
     const articleRef = makeRefObj(articleRows, 'title', 'article_id');
     let formattedComments = formatComments(commentData, articleRef);
     formattedComments = formatDate(formattedComments);
-    console.log(formattedComments[0]);
     return knex('comments').insert(formattedComments);
   }); 
   

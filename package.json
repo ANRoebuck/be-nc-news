@@ -4,14 +4,15 @@
   "description": "bc-nc-news",
   "main": "index.js",
   "scripts": {
-    "testDBoutput": "psql -f ./db/dbTest.sql > output.txt",
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "knex seed:run",
-    "test-utils": "mocha spec/utils.spec.js",
-    "test": "mocha spec/app.spec.js",
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
-    "seed-test": "npm run setup-dbs && NODE_ENV=test knex seed:run"
+    "seed-test": "npm run setup-dbs && NODE_ENV=test knex seed:run",
+
+    "test": "npm run seed-test && mocha spec/app.spec.js",
+    "test-utils": "mocha spec/utils.spec.js",
+    "testDBoutput": "psql -f ./db/dbTest.sql > output.txt"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,8 @@
   "dependencies": {
     "express": "^4.17.1",
     "knex": "^0.17.6",
-    "pg": "^7.11.0"
+    "pg": "^7.11.0",
+    "supertest": "^4.0.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",

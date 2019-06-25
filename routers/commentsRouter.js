@@ -6,10 +6,10 @@ const { errHandle405 } = require('../errHandle')
 
 
 
-commentsRouter.route('/:comment_id')
-    .patch(updateComment)
-    .delete(removeComment)
-    .all(errHandle405);
+// commentsRouter.route('/:comment_id')
+//     .patch(updateComment)
+//     .delete(removeComment)
+//     .all(errHandle405);
 
 
 

@@ -4,19 +4,19 @@ const { errHandle405 } = require('../errHandle');
 
 
 
-articlesRouter.get('/', sendArticles);
+// articlesRouter.get('/', sendArticles);
 
-articlesRouter
-    .route('/:article_id')
-    .get(getArticleById)
-    .patch(patchArticleById)
+// articlesRouter
+//     .route('/:article_id')
+//     .get(getArticleById)
+//     .patch(patchArticleById)
 
 
-articlesRouter
-    .route('/:article_id/comments')
-    .post(addCommentByArticleId)
-    .get(getCommentsByArticleId)
-    .all(errHandle405)
+// articlesRouter
+//     .route('/:article_id/comments')
+//     .post(addCommentByArticleId)
+//     .get(getCommentsByArticleId)
+//     .all(errHandle405)
 
 
 
