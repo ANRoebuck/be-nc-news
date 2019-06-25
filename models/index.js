@@ -89,3 +89,17 @@ exports.postCommentByArticleId = (comment, article_id) => {
             else return addedComment;
         });
 };
+
+exports.getCommentsByArticleId = (article_id) => {
+    return connection
+        .select('*')
+        .from('comments')
+        .where({ article_id })
+        .then(rows => {
+            if(rows.length === 0) return Promise.reject({status: 404, message:`article does not exist: ${article_id}`});
+            else return rows.map(row => {
+                delete row.article_id
+                return row;
+            });
+        });
+};

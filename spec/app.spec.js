@@ -149,6 +149,31 @@ describe('/api', () => {
                     expect(body.message).to.equal('bad request')
                 });
         });
+        it.only('GETs all comments for an article_id', () => {
+            return request
+                .get('/api/articles/1/comments')
+                .expect(200)
+                .then(({ body }) => {
+                    expect(body).to.be.an('array');
+                    expect(body[0]).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body');
+                })
+        });
+        it.only('GETs 404 not found for non-existent but valid article_id', () => {
+            return request
+                .get('/api/articles/12345/comments')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).to.equal('article does not exist: 12345');
+                });
+        });
+        it.only('GETs 400 bad request for invalid article_id', () => {
+            return request
+                .get('/api/articles/sprouts/comments')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body.message).to.equal('bad request');
+                });
+        });
     });
 
 });

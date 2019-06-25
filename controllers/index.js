@@ -3,7 +3,8 @@ const {
     getUserById,
     getArticleById,
     patchArticleById,
-    postCommentByArticleId
+    postCommentByArticleId,
+    getCommentsByArticleId
 } = require('../models');
 
 exports.sendTopics = (req, res, next) => {
@@ -51,6 +52,15 @@ exports.addCommentByArticleId = (req, res, next) => {
     postCommentByArticleId(req.body, article_id)
         .then(addedComment => {
             res.status(201).send(addedComment);
+        })
+        .catch(next);
+};
+
+exports.sendCommentsByArticleId = (req, res, next) => {
+    const { article_id } = req.params;
+    getCommentsByArticleId(article_id)
+        .then(comments => {
+            res.status(200).send(comments);
         })
         .catch(next);
 };

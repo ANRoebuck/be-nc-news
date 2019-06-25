@@ -3,6 +3,7 @@ const articlesRouter = express.Router();
 const {
     sendArticleById,
     updateArticleById,
+    sendCommentsByArticleId,
     addCommentByArticleId
  } = require('../controllers');
 const { errHandle405 } = require('../errHandle');
@@ -18,16 +19,11 @@ articlesRouter
 
 articlesRouter
     .route('/:article_id/comments')
+    .get(sendCommentsByArticleId)
     .post(addCommentByArticleId)
-//     .get(getCommentsByArticleId)
 //     .all(errHandle405)
 
 
-
-
-
-
-    
 
 
 
