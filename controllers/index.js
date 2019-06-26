@@ -25,8 +25,7 @@ exports.sendUserById = (req, res, next) => {
 };
 
 exports.sendArticles = (req, res, next) => {
-    const { article_id } = req.params;
-    getArticles(article_id)
+    getArticles({...req.params, ...req.query})
         .then(article => {
             res.status(200).send(article);
         })

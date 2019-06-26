@@ -18,7 +18,7 @@ exports.getUserById = (username) => {
         });
 };
 
-exports.getArticles = (article_id) => {
+exports.getArticles = ({ article_id, sort_by = 'created_at', order = 'asc', author, topic }) => {
     console.log(article_id, 'model');
     return connection
         .select('articles.*')
@@ -26,11 +26,13 @@ exports.getArticles = (article_id) => {
         .leftJoin('comments', 'articles.article_id', 'comments.article_id')
         .count({ comment_count: 'comments.comment_id' })
         .groupBy('articles.article_id')
+        .orderBy(sort_by, order)
         .modify(query => {
             if(article_id) query.where({ 'articles.article_id': article_id })
+            if(author) query.where({ 'articles.author': author })
+            if(topic) query.where({ 'articles.topic': topic})
         })
         .then(returnedArticles => {
-            console.log(returnedArticles);
             if(returnedArticles.length === 0) return Promise.reject({status:404, message: `article does not exist: ${article_id}`});
             else return returnedArticles;
         });
@@ -87,13 +89,3 @@ exports.getCommentsByArticleId = (article_id, { sort_by, order}) => {
             });
         });
 };
-
-// exports.getArticles = () => {
-//     return connection
-//         .select('*')
-//         .from('articles')
-//         .leftJoin('comments', 'articles.article_id', 'comments.article_id')
-//         .count({ comment_count: 'comments.comment_id'})
-//         .groupBy('articles.article_id')
-        
-// };

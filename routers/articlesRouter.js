@@ -2,7 +2,6 @@ const express = require("express");
 const articlesRouter = express.Router();
 const {
     sendArticles,
-    sendArticleById,
     updateArticleById,
     sendCommentsByArticleId,
     addCommentByArticleId

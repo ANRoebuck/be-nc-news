@@ -76,7 +76,7 @@ describe('/api', () => {
             });
         });
         describe('PATCH', () => {
-            it.only('updates an article', () => {
+            it('updates an article', () => {
                 const vote = { inc_votes: 5 };
                 return request
                     .patch('/api/articles/1')
@@ -210,7 +210,7 @@ describe('/api', () => {
                     .get('/api/articles/1/comments?sort_by=votes&order=desc')
                     .expect(200)
                     .then(({ body }) => {
-                        expect(body).to.be.sortedBy('votes',{descending : true});
+                        expect(body).to.be.sortedBy('votes', { descending: true });
                     });
             });
         });
@@ -225,6 +225,40 @@ describe('/api', () => {
                     .then( ({ body })  => {
                         expect(body).to.be.an('array');
                         expect(body[0]).to.contain.keys('author', 'title', 'article_id', 'body', 'topic', 'created_at', 'votes', 'comment_count');
+                    });
+            });
+            it('QUERY sorts by given column, defaults ascending', () => {
+                return request
+                    .get('/api/articles?sort_by=title')
+                    .expect(200)
+                    .then(({ body }) => {
+                        expect(body).to.be.sortedBy('title');
+                    });
+            });
+            it('QUERY order asc/desc', () => {
+                return request
+                    .get('/api/articles?sort_by=title&order=desc')
+                    .expect(200)
+                    .then(({ body }) => {
+                        expect(body).to.be.sortedBy('title', { descending: true });
+                    });
+            });
+            it('QUERY filter by author', () => {
+                return request
+                    .get('/api/articles?author=butter_bridge')
+                    .expect(200)
+                    .then(({ body }) => {
+                        const test = body.every(article => (article.author==='butter_bridge'))
+                        expect(test).to.equal(true);
+                    });
+            });
+            it('QUERY filter by topic', () => {
+                return request
+                    .get('/api/articles?topic=mitch')
+                    .expect(200)
+                    .then(({ body }) => {
+                        const test = body.every(article => (article.topic==='mitch'))
+                        expect(test).to.equal(true);
                     });
             });
         });
