@@ -19,41 +19,21 @@ exports.getUserById = (username) => {
 };
 
 exports.getArticleById = (article_id) => {
+
     return connection
-        .select('article_id')
-        .from('comments')
-        .groupBy('article_id')
-        .count('article_id')
-        .then(comments => {
-            const refObj = makeRefObj(comments, 'article_id', 'count');
-            return connection
-                .select('*')
-                .from('articles')
-                .where({ article_id })
-                .then(([article]) => {
-                    if(!article) return Promise.reject({status:404, message: `article does not exist: ${article_id}`});
-                    else {
-                        article.comment_count = refObj[article.article_id];
-                        return article;
-                    };
-                });
+        .select('articles.*')
+        .from('articles')
+        .leftJoin('comments', 'articles.article_id', 'comments.article_id')
+        .count({ comment_count: 'comments.comment_id' })
+        .groupBy('articles.article_id')
+        .where({ 'articles.article_id': article_id })
+        .then(([article]) => {
+            if(!article) return Promise.reject({status:404, message: `article does not exist: ${article_id}`});
+            else return article;
         });
 };
 
 exports.patchArticleById = (vote, article_id) => {
-
-    // return getArticleById(article_id)
-    //     .then(article => {
-    //         const newVotes = { votes: article.votes + vote.inc_votes }
-    //         return connection('articles')
-    //             .where({ article_id })
-    //             .update(newVotes)
-    //             .returning('*')
-    //             .then(([updatedArticle]) => {
-    //                 console.log(updatedArticle);
-    //                 return updatedArticle;
-    //             });
-    //     });
 
     return connection
         .select('votes')
