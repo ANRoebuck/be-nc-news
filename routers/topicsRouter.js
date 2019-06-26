@@ -1,15 +1,15 @@
 const express = require("express");
 const topicsRouter = express.Router();
 const { sendTopics } = require('../controllers')
-
-
-topicsRouter.get('/', sendTopics);
-
+const { errHandle405 } = require('../errHandle')
 
 
 
 
 
+topicsRouter.route('/')
+    .get(sendTopics)
+    .all(errHandle405)
 
 
 

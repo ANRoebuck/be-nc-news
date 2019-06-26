@@ -5,14 +5,14 @@ const { errHandle405 } = require('../errHandle');
 
 
 
+
+
 usersRouter
     .route('/:username/')
     .get(sendUserById)
+    .all(errHandle405)
     
     
-
-
-
 
 
 

@@ -24,6 +24,20 @@ describe('/api', () => {
                     });
             });
         });
+        describe('invalid methods', () => {
+            it('405 method not allowerd', () => {
+                const invalidMethods = ['put', 'patch', 'delete', 'post'];
+                const methodPromises = invalidMethods.map((method) => {
+                    return request
+                        [method]('/api/topics')
+                        .expect(405)
+                        .then(({ body }) => {
+                            expect(body.message).to.equal('method not allowed');
+                        });
+                });
+                return Promise.all(methodPromises);
+            });
+        });
     });
         
     describe('/users/:username', () => {
@@ -44,6 +58,20 @@ describe('/api', () => {
                     .then(({ body }) => {
                         expect(body.message).to.equal('user does not exist: gollum');
                     });
+            });
+        });
+        describe('invalid methods', () => {
+            it('405 method not allowerd', () => {
+                const invalidMethods = ['put', 'patch', 'delete', 'post'];
+                const methodPromises = invalidMethods.map((method) => {
+                    return request
+                        [method]('/api/users/rogersop')
+                        .expect(405)
+                        .then(({ body }) => {
+                            expect(body.message).to.equal('method not allowed');
+                        });
+                });
+                return Promise.all(methodPromises);
             });
         });
     });
@@ -105,6 +133,20 @@ describe('/api', () => {
                     .then(({ body }) => {
                         expect(body.message).to.equal('bad request');
                     });
+            });
+        });
+        describe('invalid methods', () => {
+            it('405 method not allowerd', () => {
+                const invalidMethods = ['put', 'delete', 'post'];
+                const methodPromises = invalidMethods.map((method) => {
+                    return request
+                        [method]('/api/articles/1')
+                        .expect(405)
+                        .then(({ body }) => {
+                            expect(body.message).to.equal('method not allowed');
+                        });
+                });
+                return Promise.all(methodPromises);
             });
         });
     });
@@ -214,6 +256,20 @@ describe('/api', () => {
                     });
             });
         });
+        describe('invalid methods', () => {
+            it('405 method not allowerd', () => {
+                const invalidMethods = ['put', 'delete', 'patch'];
+                const methodPromises = invalidMethods.map((method) => {
+                    return request
+                        [method]('/api/articles/1/comments')
+                        .expect(405)
+                        .then(({ body }) => {
+                            expect(body.message).to.equal('method not allowed');
+                        });
+                });
+                return Promise.all(methodPromises);
+            });
+        });
     });
 
     describe('/articles', () =>{
@@ -260,6 +316,20 @@ describe('/api', () => {
                         const test = body.every(article => (article.topic==='mitch'))
                         expect(test).to.equal(true);
                     });
+            });
+        });
+        describe('invalid methods', () => {
+            it('405 method not allowerd', () => {
+                const invalidMethods = ['patch', 'put', 'delete', 'post'];
+                const methodPromises = invalidMethods.map((method) => {
+                    return request
+                        [method]('/api/articles')
+                        .expect(405)
+                        .then(({ body }) => {
+                            expect(body.message).to.equal('method not allowed');
+                        });
+                });
+                return Promise.all(methodPromises);
             });
         });
     });
@@ -330,17 +400,30 @@ describe('/api', () => {
                     });
             });
         });
+        describe('invalid methods', () => {
+            it('405 method not allowerd', () => {
+                const invalidMethods = ['get', 'post', 'put'];
+                const methodPromises = invalidMethods.map((method) => {
+                    return request
+                        [method]('/api/comments/1')
+                        .expect(405)
+                        .then(({ body }) => {
+                            expect(body.message).to.equal('method not allowed');
+                        });
+                });
+                return Promise.all(methodPromises);
+            });
+        });
     });
 
+    describe('invalid endpoint', () => {
+        it('404 not found', () => {
+            return request
+                .get('/menu/status')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).to.equal('not found');
+                });
+        });
+    });
 });
-
-describe('invalid endpoint', () => {
-    it('404 not found', () => {
-        return request
-            .get('/menu/status')
-            .expect(404)
-            .then(({ body }) => {
-                expect(body.message).to.equal('not found');
-            })
-    })
-})

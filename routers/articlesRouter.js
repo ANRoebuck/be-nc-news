@@ -9,21 +9,21 @@ const {
 const { errHandle405 } = require('../errHandle');
 
 
-articlesRouter.get('/', sendArticles);
 
-articlesRouter
-    .route('/:article_id')
+articlesRouter.route('/')
     .get(sendArticles)
-    .patch(updateArticleById);
+    .all(errHandle405)
+
+articlesRouter.route('/:article_id')
+    .get(sendArticles)
+    .patch(updateArticleById)
+    .all(errHandle405)
 
 
-articlesRouter
-    .route('/:article_id/comments')
+articlesRouter.route('/:article_id/comments')
     .get(sendCommentsByArticleId)
     .post(addCommentByArticleId)
-//     .all(errHandle405)
-
-
+    .all(errHandle405)
 
 
 

@@ -19,7 +19,6 @@ exports.getUserById = (username) => {
 };
 
 exports.getArticles = ({ article_id, sort_by = 'created_at', order = 'asc', author, topic }) => {
-    console.log(article_id, 'model');
     return connection
         .select('articles.*')
         .from('articles')
