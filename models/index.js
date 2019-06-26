@@ -18,18 +18,21 @@ exports.getUserById = (username) => {
         });
 };
 
-exports.getArticleById = (article_id) => {
-
+exports.getArticles = (article_id) => {
+    console.log(article_id, 'model');
     return connection
         .select('articles.*')
         .from('articles')
         .leftJoin('comments', 'articles.article_id', 'comments.article_id')
         .count({ comment_count: 'comments.comment_id' })
         .groupBy('articles.article_id')
-        .where({ 'articles.article_id': article_id })
-        .then(([article]) => {
-            if(!article) return Promise.reject({status:404, message: `article does not exist: ${article_id}`});
-            else return article;
+        .modify(query => {
+            if(article_id) query.where({ 'articles.article_id': article_id })
+        })
+        .then(returnedArticles => {
+            console.log(returnedArticles);
+            if(returnedArticles.length === 0) return Promise.reject({status:404, message: `article does not exist: ${article_id}`});
+            else return returnedArticles;
         });
 };
 
@@ -70,11 +73,12 @@ exports.postCommentByArticleId = (comment, article_id) => {
         });
 };
 
-exports.getCommentsByArticleId = (article_id) => {
+exports.getCommentsByArticleId = (article_id, { sort_by, order}) => {
     return connection
         .select('*')
         .from('comments')
         .where({ article_id })
+        .orderBy(sort_by || 'created_at', order || 'asc')
         .then(rows => {
             if(rows.length === 0) return Promise.reject({status: 404, message:`article does not exist: ${article_id}`});
             else return rows.map(row => {
@@ -83,3 +87,13 @@ exports.getCommentsByArticleId = (article_id) => {
             });
         });
 };
+
+// exports.getArticles = () => {
+//     return connection
+//         .select('*')
+//         .from('articles')
+//         .leftJoin('comments', 'articles.article_id', 'comments.article_id')
+//         .count({ comment_count: 'comments.comment_id'})
+//         .groupBy('articles.article_id')
+        
+// };

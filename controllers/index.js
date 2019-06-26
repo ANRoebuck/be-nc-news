@@ -1,7 +1,7 @@
 const {
     getTopics,
     getUserById,
-    getArticleById,
+    getArticles,
     patchArticleById,
     postCommentByArticleId,
     getCommentsByArticleId
@@ -24,9 +24,9 @@ exports.sendUserById = (req, res, next) => {
         .catch(next);
 };
 
-exports.sendArticleById = (req, res, next) => {
+exports.sendArticles = (req, res, next) => {
     const { article_id } = req.params;
-    getArticleById(article_id)
+    getArticles(article_id)
         .then(article => {
             res.status(200).send(article);
         })
@@ -37,7 +37,7 @@ exports.updateArticleById = (req, res, next) => {
     const { article_id } = req.params;
     patchArticleById(req.body, article_id)
         .then(result => {
-            return getArticleById(article_id);
+            return getArticles(article_id);
         })
         .then(updatedArticle => {
             res.status(201).send(updatedArticle);
@@ -58,7 +58,7 @@ exports.addCommentByArticleId = (req, res, next) => {
 
 exports.sendCommentsByArticleId = (req, res, next) => {
     const { article_id } = req.params;
-    getCommentsByArticleId(article_id)
+    getCommentsByArticleId(article_id, req.query)
         .then(comments => {
             res.status(200).send(comments);
         })

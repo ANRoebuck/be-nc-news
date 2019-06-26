@@ -1,6 +1,7 @@
 const express = require("express");
 const articlesRouter = express.Router();
 const {
+    sendArticles,
     sendArticleById,
     updateArticleById,
     sendCommentsByArticleId,
@@ -9,11 +10,11 @@ const {
 const { errHandle405 } = require('../errHandle');
 
 
-// articlesRouter.get('/', sendArticles);
+articlesRouter.get('/', sendArticles);
 
 articlesRouter
     .route('/:article_id')
-    .get(sendArticleById)
+    .get(sendArticles)
     .patch(updateArticleById);
 
 
