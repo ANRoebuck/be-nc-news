@@ -4,7 +4,9 @@ const {
     getArticles,
     patchArticleById,
     postCommentByArticleId,
-    getCommentsByArticleId
+    getCommentsByArticleId,
+    patchComment,
+    deleteComment
 } = require('../models');
 
 exports.sendTopics = (req, res, next) => {
@@ -60,6 +62,25 @@ exports.sendCommentsByArticleId = (req, res, next) => {
     getCommentsByArticleId(article_id, req.query)
         .then(comments => {
             res.status(200).send(comments);
+        })
+        .catch(next);
+};
+
+exports.updateComment = (req, res, next) => {
+    const vote = req.body;
+    const { comment_id } = req.params;
+    patchComment(vote, comment_id)
+        .then(updatedComment => {
+            res.status(201).send(updatedComment);
+        })
+        .catch(next);
+};
+
+exports.removeComment = (req, res, next) => {
+    const { comment_id } = req.params;
+    deleteComment(comment_id)
+        .then(() => {
+            res.status(204).send();
         })
         .catch(next);
 };

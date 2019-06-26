@@ -39,23 +39,13 @@ exports.getArticles = ({ article_id, sort_by = 'created_at', order = 'asc', auth
 };
 
 exports.patchArticleById = (vote, article_id) => {
-
-    return connection
-        .select('votes')
-        .from('articles')
+    return connection('articles')
         .where({ article_id })
+        .increment({ votes: vote.inc_votes })
+        .returning('*')
         .then(([article]) => {
             if(!article) return Promise.reject({status:404, message: `article does not exist: ${article_id}`});
-            else {
-                const newVotes = { votes: article.votes + vote.inc_votes }
-                return connection('articles')
-                    .where({ article_id })
-                    .update(newVotes)
-                    .returning('*')
-                    .then(([updatedArticle]) => {
-                        return updatedArticle;
-                    });
-            };
+            else return article;
         });
 };
 
@@ -89,3 +79,24 @@ exports.getCommentsByArticleId = (article_id, { sort_by, order}) => {
             });
         });
 };
+
+exports.patchComment = ( vote, comment_id) => {
+    return connection('comments')
+    .where({ comment_id })
+    .increment({ votes: vote.inc_votes })
+    .returning('*')
+    .then(rows => {
+        if(rows.length === 0) return Promise.reject({status:404, message:`comment does not exist: ${comment_id}`})
+        else return rows;
+    });
+};
+
+exports.deleteComment = (comment_id) => {
+    return connection('comments')
+        .where({ comment_id })
+        .del()
+        .then(deletedRows => {
+            if(deletedRows===0) return Promise.reject({status:404, message:`comment does not exist: ${comment_id}`})
+            else return deletedRows;
+        });
+}

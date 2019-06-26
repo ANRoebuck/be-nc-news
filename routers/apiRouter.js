@@ -11,7 +11,7 @@ apiRouter.use('/comments', commentsRouter);
 apiRouter.use('/topics', topicsRouter);
 apiRouter.use('/users', usersRouter);
 
-// apiRouter.get('/', sendEndpoints);
+
 
 
 

@@ -264,4 +264,72 @@ describe('/api', () => {
         });
     });
 
+    describe('/comments/:comment_id', () => {
+        describe('PATCH', () => {
+            it('updates a comment', () => {
+                const vote = { inc_votes: 2 };
+                return request
+                    .patch('/api/comments/1')
+                    .send(vote)
+                    .expect(201)
+                    .then(({ body }) => {
+                        expect(body[0]).to.contain.keys('comment_id', 'author', 'article_id', 'votes', 'created_at', 'body');
+                    });
+            });
+            it('updates a comment with negative', () => {
+                const vote = { inc_votes: -5 };
+                return request
+                    .patch('/api/comments/1')
+                    .send(vote)
+                    .expect(201)
+                    .then(({ body }) => {
+                        expect(body[0]).to.contain.keys('comment_id', 'author', 'article_id', 'votes', 'created_at', 'body');
+                    });
+            });
+            it('404 not found for non-existent but valid comment_id', () => {
+                const vote = { inc_votes: -5 };
+                return request
+                    .patch('/api/comments/666')
+                    .send(vote)
+                    .expect(404)
+                    .then(({ body }) => {
+                        expect(body.message).to.equal('comment does not exist: 666');
+                    });
+            });
+            it('400 bad request for invalid comment_id', () => {
+                const vote = { inc_votes: -5 };
+                return request
+                    .patch('/api/comments/pineapple')
+                    .send(vote)
+                    .expect(400)
+                    .then(({ body }) => {
+                        expect(body.message).to.equal('bad request');
+                    });
+            });
+        });
+        describe('DELETE', () => {
+            it('removes a comment', () => {
+                return request
+                    .delete('/api/comments/1')
+                    .expect(204);
+            });
+            it('404 not found for non-existend but valid comment_id', () => {
+                return request
+                    .delete('/api/comments/999')
+                    .expect(404)
+                    .then(({ body }) => {
+                        expect(body.message).to.equal('comment does not exist: 999');
+                    });
+            });
+            it('400 bad request for invalid comment_id', () => {
+                return request
+                    .delete('/api/comments/tangerine')
+                    .expect(400)
+                    .then(({ body }) => {
+                        expect(body.message).to.equal('bad request');
+                    });
+            });
+        });
+    });
+
 });
