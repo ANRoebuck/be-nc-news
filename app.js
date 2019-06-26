@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const { apiRouter } = require("./routers/apiRouter");
-const { errHandleCustom, errHandle400 } = require('./errHandle');
+const { errHandleCustom, errHandleInvalidEnpoint, errHandle400 } = require('./errHandle');
 
 app.use(express.json());
 
@@ -11,17 +11,8 @@ app.use('/api', apiRouter);
 
 
 
-
+app.use('/*', errHandleInvalidEnpoint);
 app.use(errHandle400);
-
-// app.use("/*", (req, res, next) => {
-//   const errObj = {
-//     status: 404,
-//     msg: "Bad Request"
-//   };
-//   next(errObj);
-// });
-
 app.use(errHandleCustom);
 
 

@@ -333,3 +333,14 @@ describe('/api', () => {
     });
 
 });
+
+describe('invalid endpoint', () => {
+    it('404 not found', () => {
+        return request
+            .get('/menu/status')
+            .expect(404)
+            .then(({ body }) => {
+                expect(body.message).to.equal('not found');
+            })
+    })
+})
