@@ -1,5 +1,4 @@
 node_modules
 config.js
-knexfile.js
 dbTest.sql
 output.txt
