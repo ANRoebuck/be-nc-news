@@ -5,8 +5,10 @@ const { commentsRouter } = require('./commentsRouter');
 const { topicsRouter } = require('./topicsRouter');
 const { usersRouter } = require('./usersRouter');
 const endPoints = require('../endpoints.json');
-// const { sendEndPoints } = require('../models');
 const { errHandle405 } = require('../errHandle');
+
+
+
 
 
 
@@ -20,9 +22,6 @@ apiRouter.use('/articles', articlesRouter);
 apiRouter.use('/comments', commentsRouter);
 apiRouter.use('/topics', topicsRouter);
 apiRouter.use('/users', usersRouter);
-
-
-
 
 
 
