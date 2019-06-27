@@ -1,13 +1,13 @@
 const express = require("express");
 const apiRouter = express.Router();
-const { articlesRouter } = require('./articlesRouter');
-const { commentsRouter } = require('./commentsRouter');
-const { topicsRouter } = require('./topicsRouter');
-const { usersRouter } = require('./usersRouter');
 const endPoints = require('../endpoints.json');
 const { errHandle405 } = require('../errHandle');
-
-
+const {
+    articlesRouter,
+    commentsRouter,
+    topicsRouter,
+    usersRouter
+} = require('../routers')
 
 
 
