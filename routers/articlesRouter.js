@@ -2,6 +2,7 @@ const express = require("express");
 const articlesRouter = express.Router();
 const {
     sendArticles,
+    sendArticleById,
     updateArticleById,
     sendCommentsByArticleId,
     addCommentByArticleId
@@ -15,7 +16,7 @@ articlesRouter.route('/')
     .all(errHandle405)
 
 articlesRouter.route('/:article_id')
-    .get(sendArticles)
+    .get(sendArticleById)
     .patch(updateArticleById)
     .all(errHandle405)
 
@@ -24,7 +25,6 @@ articlesRouter.route('/:article_id/comments')
     .get(sendCommentsByArticleId)
     .post(addCommentByArticleId)
     .all(errHandle405)
-
 
 
 module.exports = { articlesRouter };

@@ -11,8 +11,8 @@ const {
 
 exports.sendTopics = (req, res, next) => {
     getTopics()
-        .then(rows => {
-            res.status(200).send({rows});
+        .then(topics => {
+            res.status(200).send({ topics });
         })
         .catch(next);
 };
@@ -28,50 +28,48 @@ exports.sendUserById = (req, res, next) => {
 
 exports.sendArticles = (req, res, next) => {
     getArticles({...req.params, ...req.query})
-        .then(article => {
-            res.status(200).send(article);
+        .then(articles => {
+            res.status(200).send({ articles });
+        })
+        .catch(next);
+};
+
+exports.sendArticleById = (req, res, next) => {
+    getArticles({...req.params, ...req.query})
+        .then(([ article ])=> {
+            res.status(200).send({ article });
         })
         .catch(next);
 };
 
 exports.updateArticleById = (req, res, next) => {
-    const { article_id } = req.params;
-    patchArticleById(req.body, article_id)
-        .then(result => {
-            return getArticles(article_id);
-        })
-        .then(updatedArticle => {
-            res.status(201).send(updatedArticle);
+    patchArticleById({ ...req.params, ...req.body })
+        .then(([ article ]) => {
+            res.status(200).send({ article });
         })
         .catch(next);
-        //readme says to return updated article, not just updated value
-        //correct to re-query db & use second model?
 };
 
 exports.addCommentByArticleId = (req, res, next) => {
-    const { article_id } = req.params;
-    postCommentByArticleId(req.body, article_id)
-        .then(addedComment => {
-            res.status(201).send(addedComment);
+    postCommentByArticleId({ ...req.body, ...req.params })
+        .then(comment => {
+            res.status(201).send({ comment });
         })
         .catch(next);
 };
 
 exports.sendCommentsByArticleId = (req, res, next) => {
-    const { article_id } = req.params;
-    getCommentsByArticleId(article_id, req.query)
+    getCommentsByArticleId({ ...req.params, ...req.query })
         .then(comments => {
-            res.status(200).send(comments);
+            res.status(200).send({ comments });
         })
         .catch(next);
 };
 
 exports.updateComment = (req, res, next) => {
-    const vote = req.body;
-    const { comment_id } = req.params;
-    patchComment(vote, comment_id)
-        .then(updatedComment => {
-            res.status(201).send(updatedComment);
+    patchComment({... req.body, ...req.params })
+        .then(comment => {
+            res.status(200).send({ comment });
         })
         .catch(next);
 };

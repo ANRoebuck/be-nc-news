@@ -7,7 +7,6 @@ exports.errHandle400 = (err, req, res, next) => {
     //23502 => 'violates non-null constraint'
     //23503 => 'violates foreign key restraint'
     if(codes.includes(err.code)){
-        console.log(`custom error for psql error ${err.code}`)
         res.status(400).send({message: 'bad request'});
     }
     else next(err);
