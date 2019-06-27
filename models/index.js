@@ -32,6 +32,12 @@ exports.getArticles = ({ article_id, sort_by = 'created_at', order = 'asc', auth
             if(topic) query.where({ 'articles.topic': topic})
         })
         .then(returnedArticles => {
+            return returnedArticles.map(article => {
+                article.comment_count = parseInt(article.comment_count);
+                return article;
+            });
+        })
+        .then(returnedArticles => {
             if(returnedArticles.length === 0) return Promise.reject({status:404, message: `article does not exist: ${article_id}`});
             else return returnedArticles;
         });

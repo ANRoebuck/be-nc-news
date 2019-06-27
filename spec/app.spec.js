@@ -291,6 +291,15 @@ describe('/api', () => {
                         expect(body).to.be.sortedBy('title');
                     });
             });
+            it('QUERY sorts by given column', () => {
+                return request
+                    .get('/api/articles?sort_by=comment_count')
+                    .expect(200)
+                    .then(({ body }) => {
+                        console.log(body);
+                        expect(body).to.be.sortedBy('comment_count');
+                    });
+            });
             it('QUERY order asc/desc', () => {
                 return request
                     .get('/api/articles?sort_by=title&order=desc')
