@@ -17,4 +17,4 @@ app.use(errHandleCustom);
 
 
 
-module.exports = { app };
+module.exports = app;
